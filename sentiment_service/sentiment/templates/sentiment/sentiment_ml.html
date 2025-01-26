@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pós Graduação UFG Framework</title>
+
+    <!-- Incluindo o CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+  </head>
+  <body>
+    <!-- Menu Expansível -->
+    <div class="expandable-menu">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="menu-content">
+        <a href="http://127.0.0.1:8000/admin" >Admin</a>
+        <a href="http://127.0.0.1:8000/sentiment">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
+        <a href="http://127.0.0.1:8000/historico/">Histórico de Análises</a>
+        <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
+      </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="chat-container">
+      <!-- Cabeçalho -->
+      <div class="chat-header">
+        <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
+        <h1>Classificação de sentimentos - Machine learning</h1>
+      </div>
+
+      <!-- Formulário de Entrada -->
+      <div class="form-container">
+        <form onsubmit="event.preventDefault(); getSentiment();">
+          {% csrf_token %}
+          <textarea id="text" class="text-input" rows="4" placeholder="Digite o texto para análise..."></textarea>
+          <button type="submit" class="submit-btn">Classificar Sentimento</button>
+        </form>
+        <div id="result" class="result-container"></div>
+      </div>
+    </div>
+
+    <!-- Incluindo os scripts -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+      // Função para alternar o menu expansível
+      function toggleMenu() {
+        const menu = document.querySelector('.menu-content');
+        menu.classList.toggle('expanded');
+      }
+
+      // Função para enviar o texto e exibir a previsão de sentimento
+      async function getSentiment() {
+        const text = document.getElementById('text').value;
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        // Verificar se o texto foi fornecido
+        if (!text) {
+          alert('Por favor, insira um texto!');
+          return;
+        }
+
+        try {
+          // Enviar o texto via GET para a API Django
+          const response = await fetch(`/predict-sentiment/?text=${encodeURIComponent(text)}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken,
+            },
+          });
+
+          const data = await response.json();
+
+          // Exibir o resultado
+          const resultElement = document.getElementById('result');
+          if (data.sentimento_previsto) {
+            resultElement.innerHTML = `
+              <strong>Sentimento:</strong> 
+              <span class="badge ${data.sentimento_previsto === 'NEGATIVO' ? 'negative' : 'positive'}">
+                ${data.sentimento_previsto}
+              </span>
+            `;
+          } else {
+            resultElement.innerHTML = `<strong>Error:</strong> ${data.error || 'Erro desconhecido'}`;
+          }
+        } catch (error) {
+          console.error('Erro ao realizar a previsão:', error);
+          document.getElementById('result').innerHTML = '<strong>Error:</strong> Falha na requisição.';
+        }
+      }
+    </script>
+  </body>
+</html>

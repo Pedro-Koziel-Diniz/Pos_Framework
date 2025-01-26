@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
@@ -126,6 +126,5 @@ def generate_wordcloud(df, language='en'):
     
 # Exemplo de uso para o idioma inglês
 generate_wordcloud(df, language='en')
-
 # Exemplo de uso para o idioma português
 generate_wordcloud(df, language='pt')

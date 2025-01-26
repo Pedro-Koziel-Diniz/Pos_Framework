@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sobre</title>
+
+    <!-- Incluindo o CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+  </head>
+  <body>
+    <!-- Menu Expansível -->
+    <div class="expandable-menu">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="menu-content">
+        <a href="http://127.0.0.1:8000/admin">Admin</a>
+        <a href="http://127.0.0.1:8000/sentiment">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
+        <a href="http://127.0.0.1:8000/historico/">Histórico de Análises</a>
+        <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
+      </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <h1>Projeto Final - Disciplina de Framework</h1>
+      </div>
+      <div class="form-container">
+        <section class="project-description">
+          <h2>Sobre o Projeto</h2>
+          <p>Projeto realizado como trabalho final da disciplina de Framework para Especialização em Agentes Inteligentes, ministrada na Universidade Federal de Goiás (UFG). Ele consiste no desenvolvimento de uma aplicação web com o Framework DJANGO para análise de sentimentos.</p>
+        </section>
+
+        <section class="team-details">
+          <h2>Professor Responsável</h2>
+          <p>Ronaldo Martins Da Costa</p>
+
+          <h2>Integrantes da Equipe</h2>
+          <ul>
+            <li>Marcos Vinicius Satil Medeiros</li>
+            <li>Pedro Koziel Diniz</li>
+            <li>Wagner Hélio da Silva Filho</li>
+          </ul>
+        </section>
+
+        <section class="activities">
+          <h2>Descrição do trabalho</h2>
+          <p>Construir um site, aplicação (web/internet - Django), de forma que haja (i) carregamento de dados (ex: csv, excel, etc.), (ii) uso de algoritmo de IA, e (iii) mostrar os resultados em tela.</p>
+          <ul>
+            <li>Implementação de algoritmos de classificação de sentimentos utilizando modelos baseados em aprendizado de máquina e API da OpenAI para classificação dos textos.</li>
+            <li>Otimização de hiperparâmetros e testes com diferentes modelos de machine learning.</li>
+            <li>Desenvolvimento de uma interface para interação com os modelos e visualização dos resultados.</li>
+            <li>Criação de um banco de dados para armazenar e gerenciar o histórico de análises realizadas.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <!-- Incluindo o JS -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+      function toggleMenu() {
+        const menu = document.querySelector('.menu-content')
+        menu.classList.toggle('expanded')
+      }
+    </script>
+  </body>
+</html>

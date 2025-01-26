@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pós Graduação UFG Framework</title>
+
+    <!-- Incluindo o CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+    <style>
+      .table-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+      }
+      .history-table {
+        border-collapse: collapse;
+        width: 80%;
+        text-align: center;
+      }
+      .history-table th,
+      .history-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      .history-table th {
+        background-color: rgb(134, 121, 121);
+      }
+      .uppercase {
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Menu Expansível -->
+    <div class="expandable-menu">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="menu-content">
+        <a href="http://127.0.0.1:8000/admin">Admin</a>
+        <a href="http://127.0.0.1:8000/sentiment">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
+        <a href="http://127.0.0.1:8000/historico/">Histórico de Análises</a>
+        <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
+      </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="chat-container">
+      <!-- Cabeçalho -->
+      <div class="chat-header">
+        <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
+        <h1>Histórico de Previsões</h1>
+      </div>
+
+      <!-- Tabela de Histórico -->
+      <div class="table-container">
+        <table border="1" class="history-table">
+          <thead>
+            <tr>
+              <th>Texto de entrada</th>
+              <th>Sentimento previsto</th>
+              <th>Data de entrada</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prediction in predictions %}
+              <tr>
+                <td>{{ prediction.text }}</td>
+                <td class="uppercase">{{ prediction.sentiment }}</td>
+                <td>{{ prediction.created_at }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Incluindo os scripts -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+      // Função para alternar o menu expansível
+      function toggleMenu() {
+        const menu = document.querySelector('.menu-content')
+        menu.classList.toggle('expanded')
+      }
+    </script>
+  </body>
+</html>

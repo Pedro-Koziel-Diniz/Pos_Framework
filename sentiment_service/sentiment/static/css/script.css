@@ -1,0 +1,229 @@
+/* Configuração geral */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1e1e2f;
+  color: #dcdcdc;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Menu expansível */
+.expandable-menu {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background-color: #3f3f5f;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.menu-toggle {
+  background-color: #3a86ff;
+  color: white;
+  border: none;
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.menu-toggle:hover {
+  background-color: #2f6fde;
+}
+
+.menu-content {
+  display: none;
+  flex-direction: column;
+  background-color: #3f3f5f;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.menu-content.expanded {
+  display: flex;
+}
+
+.menu-content a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 5px 0;
+  background-color: #45456b;
+}
+
+.menu-content a:hover {
+  background-color: #2f6fde;
+}
+
+/* Container principal */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  height: 90vh;
+  background-color: #2b2b40;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Cabeçalho */
+.chat-header {
+  padding: 16px;
+  background-color: #3f3f5f;
+  color: #ffffff;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.chat-header img {
+  max-height: 100px; /* Aumenta a altura máxima da imagem */
+  margin-bottom: 5px; /* Reduz o espaçamento inferior */
+  width: auto; /* Mantém a proporção da largura */
+  display: block; /* Garante que a imagem se comporte como um bloco */
+  margin-left: auto; /* Centraliza horizontalmente */
+  margin-right: auto; /* Centraliza horizontalmente */
+}
+
+.chat-header {
+  text-align: center; /* Centraliza o texto e a imagem */
+  padding: 10px; /* Reduz o espaçamento interno do cabeçalho */
+}
+
+/* Formulário */
+.form-container {
+  padding: 16px;
+  background-color: #2b2b40;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.text-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background-color: #3f3f5f;
+  color: #dcdcdc;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #3a86ff;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #2f6fde;
+}
+
+.result-container {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.badge {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.badge.positive {
+  background-color: #28a745;
+}
+
+.badge.negative {
+  background-color: #dc3545;
+}
+
+/* Menu expansível */
+.expandable-menu {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background-color: #3f3f5f;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+}
+
+.menu-toggle {
+  background-color: #3a86ff;
+  color: white;
+  border: none;
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.menu-toggle:hover {
+  background-color: #2f6fde;
+}
+
+.menu-content {
+  display: none; /* Oculto inicialmente */
+  flex-direction: row; /* Alinha os links horizontalmente */
+  background-color: #3f3f5f;
+  border-radius: 8px;
+  margin-left: 10px; /* Espaçamento ao lado do botão */
+  padding: 5px 10px; /* Espaçamento interno */
+}
+
+.menu-content.expanded {
+  display: flex; /* Exibe os links ao expandir */
+}
+
+.menu-content a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 0 5px; /* Espaçamento horizontal entre os links */
+  background-color: #45456b;
+  white-space: nowrap; /* Evita quebra de linha nos links */
+}
+
+.menu-content a:hover {
+  background-color: #2f6fde;
+}
+.form-container .text-input {
+  width: 97%; /* Largura relativa ao contêiner */
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background-color: #3f3f5f;
+  color: #dcdcdc;
+}
+

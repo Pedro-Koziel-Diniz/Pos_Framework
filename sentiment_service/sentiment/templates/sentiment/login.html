@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Sentiment Service</title>
+
+    <!-- Incluindo o CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+  </head>
+  <body>
+    <!-- Menu Expansível -->
+    <div class="expandable-menu">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="menu-content">
+        <a href="http://127.0.0.1:8000/admin/">Admin</a>
+        <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
+      </div>
+    </div>
+
+    <!-- Formulário de Login -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
+        <h1>Bem-vindo ao Sentiment Service</h1>
+      </div>
+      <div class="form-container">
+        <form method="POST" action="{% url 'index' %}">
+          {% csrf_token %}
+          <input type="text" name="username" class="text-input" placeholder="Usuário" required style="width: 90%; max-width: 340px;" />
+          <input type="password" name="password" class="text-input" placeholder="Senha" required style="width: 80%; max-width: 340px;" />                          
+          <button type="submit" class="submit-btn">Entrar</button>
+        </form>
+        {{ msg }}
+      </div>
+    </div>
+
+    <!-- Incluindo o JS -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+      function toggleMenu() {
+        const menu = document.querySelector('.menu-content');
+        menu.classList.toggle('expanded');
+      }
+    </script>
+  </body>
+</html>

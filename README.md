@@ -1,4 +1,4 @@
-# Guia de Execução do Projeto Django
+# Projeto Final - Disciplina de Framework 
 Siga as instruções abaixo para garantir uma instalação e execução corretas.
 
 ---
