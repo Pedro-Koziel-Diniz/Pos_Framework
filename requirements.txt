@@ -59,4 +59,4 @@ propcache==0.2.1
 requests==2.32.3
 urllib3==2.3.0
 yarl==1.18.3
-python-dotenv==1.0.
+python-dotenv==1.0.0
