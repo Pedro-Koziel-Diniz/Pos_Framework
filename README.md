@@ -1,10 +1,16 @@
-# Pós Agentes Inteligentes - FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTFICIAL
+# Pós Agentes Inteligentes - FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL
 
-Repositório dedicado para o trabalho final desenvolvido na discipla de FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTFICIAL, da pós graduação de Agentes Inteligentes, pela UFG.
+Repositório dedicado para o trabalho final desenvolvido na disciplina de FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL, da pós graduação de Agentes Inteligentes, pela UFG.
 
 Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
 
-Trabalho desenvolvido: Elaboração de uma aplicação com Django para que usuários consigam realizar a análise de sentimentos de determinados textos.
+## Descrição do trabalho
+
+Construir um site, aplicação (web/internet - Django), de forma que haja (i) carregamento de dados (ex: csv, excel, etc.), (ii) uso de algoritmo de IA, e (iii) mostrar os resultados em tela.
+          - Implementação de algoritmos de classificação de sentimentos utilizando modelos baseados em aprendizado de máquina e API da OpenAI para classificação dos textos.
+          - Otimização de hiperparâmetros e testes com diferentes modelos de machine learning.
+          - Desenvolvimento de uma interface para interação com os modelos e visualização dos resultados.
+          - Criação de um banco de dados para armazenar e gerenciar o histórico de análises realizadas.
 
 # Projeto Final
 
