@@ -1,4 +1,14 @@
-# Projeto Final - Disciplina de Framework 
+# Pós Agentes Inteligentes - FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTFICIAL
+
+Repositório dedicado para o trabalho final desenvolvido na discipla de FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTFICIAL, da pós graduação de Agentes Inteligentes, pela UFG.
+
+Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
+
+Trabalho desenvolvido: Elaboração de uma aplicação com Django para que usuários consigam realizar a análise de sentimentos de determinados textos.
+
+# Projeto Final
+
+
 Siga as instruções abaixo para garantir uma instalação e execução corretas.
 
 ---
