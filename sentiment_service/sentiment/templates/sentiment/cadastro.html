@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Sentiment Service</title>
+
+    <!-- Incluindo o CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+  </head>
+  <body>
+    <!-- Menu Expansível -->
+    <div class="expandable-menu">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="menu-content">
+        <a href="http://127.0.0.1:8000/admin/">Admin</a>
+      </div>
+    </div>
+
+    <!-- Formulário de Cadastro -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
+        <h1>Cadastro de Usuário</h1>
+      </div>
+      <div class="form-container">
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <form method="POST" action="{% url 'cadastro' %}">
+          {% csrf_token %}
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            class="text-input"
+            placeholder="Nome Completo"
+            required
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <input
+            type="text"
+            id="usuario"
+            name="usuario"
+            class="text-input"
+            placeholder="Usuário"
+            required
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            class="text-input"
+            placeholder="Senha"
+            required
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="text-input"
+            placeholder="E-mail"
+            required
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <input
+            type="text"
+            id="celular"
+            name="celular"
+            class="text-input"
+            placeholder="(00) 00000-0000"
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <input
+            type="text"
+            id="funcao"
+            name="funcao"
+            class="text-input"
+            placeholder="Cargo ou Função"
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <input
+            type="date"
+            id="nascimento"
+            name="nascimento"
+            class="text-input"
+            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
+          />
+          <button type="submit" class="submit-btn" style="background-color: #4CAF50; width: 150px;">
+            Cadastrar
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Incluindo o JS -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+      function toggleMenu() {
+        const menu = document.querySelector('.menu-content');
+        menu.classList.toggle('expanded');
+      }
+    </script>
+  </body>
+</html>
