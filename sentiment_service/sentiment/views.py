@@ -8,31 +8,44 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from .models import PredictionHistory
+from .models import pessoa
+from django.contrib import messages
 
 load_dotenv()  # take environment variables from .env.
 
 # Configurar a API key da OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def index(request):    
-    usuario = request.POST.get('username')
-    senha = request.POST.get('password')
-    user = authenticate(username=usuario, password=senha)
-    if (user is not None):
-        login(request, user)
-        request.session['username'] = usuario
-        request.session['password'] = senha
-        request.session['usernamefull'] = user.get_full_name()
-        print(request.session['username'])
-        print(request.session['password'])
-        print(request.session['usernamefull'])
-        return redirect('sentiment/')
-    else:
-        data = {}
-        if (usuario):
-            data['msg'] = "Usuário ou Senha Incorretos "
-        return render(request, 'sentiment/login.html', data)
+def index(request):
+    if request.method == 'POST':
+        usuario = request.POST.get('username')
+        senha = request.POST.get('password')
 
+        # Primeiro, tenta autenticar com o sistema padrão do Django
+        user = authenticate(username=usuario, password=senha)
+        if user is not None:
+            login(request, user)
+            request.session['username'] = usuario
+            request.session['password'] = senha
+            request.session['usernamefull'] = user.get_full_name()
+            return redirect('sentiment/')
+
+        # Se falhar, tenta autenticar no modelo pessoa
+        try:
+            usuario_pessoa = pessoa.objects.get(usuario=usuario, senha=senha)
+            if usuario_pessoa.ativo:  # Verifica se está ativo
+                request.session['username'] = usuario_pessoa.usuario
+                request.session['usernamefull'] = usuario_pessoa.nome
+                return redirect('sentiment/')
+            else:
+                messages.error(request, "Usuário inativo. Contate o administrador.")
+        except pessoa.DoesNotExist:
+            messages.error(request, "Usuário ou senha incorretos.")
+
+    # Renderiza a página de login com as mensagens de erro
+    return render(request, 'sentiment/login.html')
+    
+    
 def classify_sentiment_gpt(content, model="gpt-4o-mini"):
     """
     Usa o modelo OpenAI Chat para classificar o sentimento de um texto.
@@ -57,7 +70,39 @@ def classify_sentiment_gpt(content, model="gpt-4o-mini"):
     except Exception as e:
         print(f"Error processing text: {content}\n{e}")
         return None
+    
+def cadastro(request):
+    if request.method == 'POST':
+        # Captura os dados do formulário
+        nome = request.POST.get('nome')
+        usuario = request.POST.get('usuario')
+        senha = request.POST.get('senha')
+        email = request.POST.get('email')
+        celular = request.POST.get('celular')
+        funcao = request.POST.get('funcao')
+        nascimento = request.POST.get('nascimento')
+        
+        # Cria um novo registro no modelo 'pessoa'
+        nova_pessoa = pessoa(
+            nome=nome,
+            usuario=usuario,
+            senha=senha,
+            email=email,
+            celular=celular,
+            funcao=funcao,
+            nascimento=nascimento,
+        )
+        nova_pessoa.save()
+        
+        # Adiciona uma mensagem de sucesso
+        messages.success(request, f'Usuário {nome} cadastrado com sucesso!')
+        
+        # Redireciona para uma página de sucesso (pode ser alterado)
+        return redirect('index')  # Substitua 'index' pelo nome correto da sua URL de destino
 
+    # Renderiza o formulário de cadastro
+    return render(request, 'sentiment/cadastro.html')
+    
 def sentiment(request):
     return render(request, 'sentiment/sentiment.html')
 
@@ -74,7 +119,7 @@ def classify_sentiment(request):
         # Se o sentimento for "pos", converte para "POSITIVO"
         elif sentiment == "pos":
             sentiment = "POSITIVO"
-        PredictionHistory.objects.create(text=text, sentiment=sentiment)
+        PredictionHistory.objects.create(text=text, sentiment=sentiment, source='sentiment')
         return JsonResponse({'text': text, 'sentiment': sentiment})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -112,7 +157,7 @@ def predict_sentiment(request):
         except ValueError as e:
             # Em caso de erro, significa que o modelo está tentando usar um rótulo desconhecido
             return JsonResponse({'error': f'Rótulo desconhecido detectado: {str(e)}'}, status=400)
-        PredictionHistory.objects.create(text=new_text, sentiment=predicted_label[0])
+        PredictionHistory.objects.create(text=new_text, sentiment=predicted_label[0], source='sentiment_ml')
         # Retorna o resultado como JSON
         return JsonResponse({
             'texto': new_text,

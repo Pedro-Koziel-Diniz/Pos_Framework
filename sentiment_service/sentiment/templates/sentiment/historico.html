@@ -62,6 +62,7 @@
               <th>Texto de entrada</th>
               <th>Sentimento previsto</th>
               <th>Data de entrada</th>
+              <th>Origem</th>
             </tr>
           </thead>
           <tbody>
@@ -70,6 +71,7 @@
                 <td>{{ prediction.text }}</td>
                 <td class="uppercase">{{ prediction.sentiment }}</td>
                 <td>{{ prediction.created_at }}</td>
+                <td class="uppercase">{{ prediction.source }}</td>
               </tr>
             {% endfor %}
           </tbody>

@@ -5,6 +5,8 @@ from .models import pessoa
 
 class pessoa_table(tables.Table):
     nome = tables.LinkColumn("pessoa_update_alias", args=[A("pk")])
+    usuario = tables.LinkColumn("pessoa_update_alias", args=[A("pk")])
+    senha = tables.LinkColumn("pessoa_update_alias", args=[A("pk")])
     email = tables.LinkColumn("pessoa_update_alias", args=[A("pk")])
     celular = tables.LinkColumn("pessoa_update_alias", args=[A("pk")])
     funcao = tables.LinkColumn("pessoa_update_alias", args=[A("pk")])

@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 class pessoa(models.Model):
     nome = models.CharField(max_length=50, null=False, blank=False, verbose_name='Nome')
+    usuario = models.CharField(max_length=50, null=False, blank=False, verbose_name='Usuario', default='default_user')
+    senha = models.CharField(max_length=50, null=False, blank=False, verbose_name='Senha', default='default_pass')
     email = models.CharField(max_length=50, null=False, blank=False, verbose_name='eMail')
     celular = models.CharField(max_length=20, null=True, blank=True, verbose_name='celular')
     funcao = models.CharField(max_length=30, null=True, blank=True, verbose_name='Funcao')
@@ -17,6 +19,7 @@ class pessoa(models.Model):
 class PredictionHistory(models.Model):
     text = models.TextField()  # Texto inserido
     sentiment = models.CharField(max_length=50)  # Sentimento previsto
+    source = models.CharField(max_length=50, default="sentiment")  # Origem do registro
     created_at = models.DateTimeField(auto_now_add=True)  # Data e hora da previsão
 
     def __str__(self):

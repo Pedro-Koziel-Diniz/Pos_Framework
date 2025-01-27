@@ -11,4 +11,5 @@ urlpatterns = [
     path('sobre/', views.sobre, name='sobre'),
     path('sentiment-ml/', views.sentiment_ml, name='sentiment_ml'),
     path('predict-sentiment/', views.predict_sentiment, name='predict_sentiment'),
+    path('cadastro/', views.cadastro, name='cadastro'),
 ]

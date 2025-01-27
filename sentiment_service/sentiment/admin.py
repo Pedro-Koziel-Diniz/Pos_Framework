@@ -12,7 +12,7 @@ def desabilitar_pessoas(ModelAdmin, request, queryset):
     queryset.update(ativo=False)
 
 class PessoaCustomizado(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'celular', 'funcao', 'nascimento', 'calcula_idade', 'ativo', )
+    list_display = ('nome', 'usuario', 'senha', 'email', 'celular', 'funcao', 'nascimento', 'calcula_idade', 'ativo', )
     actions = [habilitar_pessoas, desabilitar_pessoas]
     
     @admin.display(description='Idade')
