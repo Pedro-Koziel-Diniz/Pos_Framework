@@ -4,6 +4,8 @@ Repositório dedicado para o trabalho final desenvolvido na disciplina de FRAMEW
 
 Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
 
+A gravação pode ser acessada em: https://drive.google.com/file/d/1zLBL8sE_cz4gcuLSia4sWccVbJuXvtWB/view?usp=sharing
+
 ## Descrição do trabalho
 
 Construir um site, aplicação (web/internet - Django), de forma que haja (i) carregamento de dados (ex: csv, excel, etc.), (ii) uso de algoritmo de IA, e (iii) mostrar os resultados em tela.
