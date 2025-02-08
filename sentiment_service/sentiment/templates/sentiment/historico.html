@@ -71,7 +71,9 @@
               <tr>
                 <td>
                   {% if prediction.user %}
-                    {{ prediction.user.username }} <!-- Exibe o nome do usuário correto -->
+                    {{ prediction.user.username }}
+                  {% elif prediction.usuario_pessoa %}
+                    {{ prediction.usuario_pessoa.usuario }}
                   {% else %}
                     <span style="color: red;">Não cadastrado</span>
                   {% endif %}

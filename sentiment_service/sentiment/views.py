@@ -124,7 +124,15 @@ def classify_sentiment(request):
         # Se o sentimento for "pos", converte para "POSITIVO"
         elif sentiment == "pos":
             sentiment = "POSITIVO"
-        PredictionHistory.objects.create(text=text, sentiment=sentiment, source='sentiment')
+        # Verifica se o usuário logado é do modelo User ou pessoa
+        usuario_pessoa = None
+        if 'username' in request.session and not request.user.is_authenticated:
+            try:
+                usuario_pessoa = pessoa.objects.get(usuario=request.session['username'])
+            except pessoa.DoesNotExist:
+                usuario_pessoa = None
+                    
+        PredictionHistory.objects.create(text=text, sentiment=sentiment, source='sentiment', user=request.user if request.user.is_authenticated else None, usuario_pessoa=usuario_pessoa)
         return JsonResponse({'text': text, 'sentiment': sentiment})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -160,16 +168,33 @@ def predict_sentiment(request):
         try:
             predicted_label = label_encoder.inverse_transform(predicted_label_encoded)
         except ValueError as e:
-            # Em caso de erro, significa que o modelo está tentando usar um rótulo desconhecido
             return JsonResponse({'error': f'Rótulo desconhecido detectado: {str(e)}'}, status=400)
-        PredictionHistory.objects.create(text=new_text, sentiment=predicted_label[0], source='sentiment_ml')
+
+        # Determina o usuário autenticado (User ou pessoa)
+        usuario_pessoa = None
+        if 'username' in request.session and not request.user.is_authenticated:
+            try:
+                usuario_pessoa = pessoa.objects.get(usuario=request.session['username'])
+            except pessoa.DoesNotExist:
+                usuario_pessoa = None
+
+        # Criação do registro no histórico de previsões
+        PredictionHistory.objects.create(
+            text=new_text,
+            sentiment=predicted_label[0],
+            source='sentiment_ml',
+            user=request.user if request.user.is_authenticated else None,
+            usuario_pessoa=usuario_pessoa  # Associa usuário da tabela pessoa, se existir
+        )
+
         # Retorna o resultado como JSON
         return JsonResponse({
             'texto': new_text,
-            'sentimento_previsto': predicted_label[0]})
+            'sentimento_previsto': predicted_label[0]
+        })
     except Exception as e:
-        # Em caso de erro, retorna uma mensagem de erro detalhada
         return JsonResponse({'error': f'Erro ao processar o texto: {str(e)}'}, status=500)
+
 
 def history(request):
     predictions = PredictionHistory.objects.all().order_by('-created_at')  # Recupera o histórico
