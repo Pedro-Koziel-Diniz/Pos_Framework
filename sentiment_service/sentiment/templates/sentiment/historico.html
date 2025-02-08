@@ -59,6 +59,7 @@
         <table border="1" class="history-table">
           <thead>
             <tr>
+              <th>Usuário</th>
               <th>Texto de entrada</th>
               <th>Sentimento previsto</th>
               <th>Data de entrada</th>
@@ -68,6 +69,13 @@
           <tbody>
             {% for prediction in predictions %}
               <tr>
+                <td>
+                  {% if prediction.user %}
+                    {{ prediction.user.username }} <!-- Exibe o nome do usuário correto -->
+                  {% else %}
+                    <span style="color: red;">Não cadastrado</span>
+                  {% endif %}
+                </td>
                 <td>{{ prediction.text }}</td>
                 <td class="uppercase">{{ prediction.sentiment }}</td>
                 <td>{{ prediction.created_at }}</td>

@@ -5,12 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro - Sentiment Service</title>
 
-    <!-- Incluindo o CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+
+    <style>
+      .messages {
+        text-align: center;
+        margin-top: 10px;
+      }
+      .alert {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        display: inline-block;
+        width: 50%;
+        margin: auto;
+      }
+      .alert.error {
+        color: red;
+        border: 2px solid red;
+        background-color: rgba(255, 0, 0, 0.1);
+      }
+      .alert.success {
+        color: green;
+        border: 2px solid green;
+        background-color: rgba(0, 255, 0, 0.1);
+      }
+      .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
-    <!-- Menu Expansível -->
+
     <div class="expandable-menu">
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       <div class="menu-content">
@@ -18,89 +48,44 @@
       </div>
     </div>
 
-    <!-- Formulário de Cadastro -->
     <div class="chat-container">
       <div class="chat-header">
         <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
         <h1>Cadastro de Usuário</h1>
       </div>
+
+      <!-- Exibição de mensagens -->
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <div class="form-container">
-        {% if messages %}
-          <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
         <form method="POST" action="{% url 'cadastro' %}">
           {% csrf_token %}
-          <input
-            type="text"
-            id="nome"
-            name="nome"
-            class="text-input"
-            placeholder="Nome Completo"
-            required
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <input
-            type="text"
-            id="usuario"
-            name="usuario"
-            class="text-input"
-            placeholder="Usuário"
-            required
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <input
-            type="password"
-            id="senha"
-            name="senha"
-            class="text-input"
-            placeholder="Senha"
-            required
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="text-input"
-            placeholder="E-mail"
-            required
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <input
-            type="text"
-            id="celular"
-            name="celular"
-            class="text-input"
-            placeholder="(00) 00000-0000"
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <input
-            type="text"
-            id="funcao"
-            name="funcao"
-            class="text-input"
-            placeholder="Cargo ou Função"
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <input
-            type="date"
-            id="nascimento"
-            name="nascimento"
-            class="text-input"
-            style="width: 90%; max-width: 340px; margin-bottom: 10px;"
-          />
-          <button type="submit" class="submit-btn" style="background-color: #4CAF50; width: 150px;">
-            Cadastrar
-          </button>
+          <input type="text" name="nome" class="text-input" placeholder="Nome Completo" required />
+          <input type="text" name="usuario" class="text-input" placeholder="Usuário" required />
+          <input type="password" name="senha" class="text-input" placeholder="Senha" required />
+          <input type="email" name="email" class="text-input" placeholder="E-mail" required />
+          <input type="text" name="celular" class="text-input" placeholder="(00) 00000-0000" />
+          <input type="text" name="funcao" class="text-input" placeholder="Cargo ou Função" />
+          <input type="date" name="nascimento" class="text-input" />
+
+          <!-- Botão centralizado -->
+          <div class="button-container">
+            <button type="submit" class="submit-btn" style="background-color: #4CAF50; width: 150px;">
+              Cadastrar
+            </button>
+          </div>
         </form>
       </div>
     </div>
 
-    <!-- Incluindo o JS -->
     <script src="{% static 'js/script.js' %}"></script>
     <script>
       function toggleMenu() {
