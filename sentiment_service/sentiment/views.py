@@ -82,6 +82,11 @@ def cadastro(request):
         funcao = request.POST.get('funcao')
         nascimento = request.POST.get('nascimento')
         
+        # Verifica se o e-mail já existe no banco de dados
+        if pessoa.objects.filter(email=email).exists():
+            messages.error(request, "E-mail já cadastrado. Utilize outro e-mail.")
+            return redirect('cadastro')  # Redireciona para a página de cadastro
+        
         # Cria um novo registro no modelo 'pessoa'
         nova_pessoa = pessoa(
             nome=nome,
