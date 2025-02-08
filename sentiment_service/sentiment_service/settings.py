@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sentiment.middleware.LogoutOnRestartMiddleware',
 ]
 
 ROOT_URLCONF = 'sentiment_service.urls'
@@ -125,3 +126,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuração para que a sessão expire ao fechar o navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

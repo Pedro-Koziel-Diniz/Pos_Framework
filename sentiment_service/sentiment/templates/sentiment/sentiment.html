@@ -21,7 +21,13 @@
         <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
       </div>
     </div>
-
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <!-- Container Principal -->
     <div class="chat-container">
       <!-- Cabeçalho -->

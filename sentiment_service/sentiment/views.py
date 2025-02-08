@@ -28,22 +28,32 @@ def index(request):
             request.session['username'] = usuario
             request.session['password'] = senha
             request.session['usernamefull'] = user.get_full_name()
-            return redirect('sentiment/')
+            return redirect('sentiment/')  # Usuário Django sempre vai para sentiment
 
-        # Se falhar, tenta autenticar no modelo pessoa
+        # Se falhar, tenta autenticar no modelo `pessoa`
         try:
             usuario_pessoa = pessoa.objects.get(usuario=usuario, senha=senha)
-            if usuario_pessoa.ativo:  # Verifica se está ativo
+            if usuario_pessoa.ativo:  # Verifica se o usuário está ativo
                 request.session['username'] = usuario_pessoa.usuario
                 request.session['usernamefull'] = usuario_pessoa.nome
-                return redirect('sentiment/')
+                
+                # Lógica de redirecionamento baseada nas permissões
+                if usuario_pessoa.permissao_sentiment:
+                    return redirect('sentiment')  # Redireciona para Sentiment GPT
+                elif usuario_pessoa.permissao_sentiment_ml:
+                    return redirect('sentiment_ml')  # Redireciona para Sentiment ML
+                else:
+                    messages.error(request, "Você não tem permissão para acessar o sistema.")
+                    return redirect('index')  # Redireciona para login
+
             else:
                 messages.error(request, "Usuário inativo. Contate o administrador.")
+
         except pessoa.DoesNotExist:
             messages.error(request, "Usuário ou senha incorretos.")
 
-    # Renderiza a página de login com as mensagens de erro
     return render(request, 'sentiment/login.html')
+
     
     
 def classify_sentiment_gpt(content, model="gpt-4o-mini"):
@@ -107,8 +117,22 @@ def cadastro(request):
 
     # Renderiza o formulário de cadastro
     return render(request, 'sentiment/cadastro.html')
-    
 def sentiment(request):
+    usuario = request.session.get('username', None)
+
+    if not usuario:
+        messages.error(request, "Você precisa estar logado para acessar esta página.")
+        return redirect('index')
+
+    try:
+        usuario_pessoa = pessoa.objects.get(usuario=usuario)
+        if not usuario_pessoa.permissao_sentiment:
+            messages.error(request, "Você não tem permissão para acessar esta página.")
+            return redirect('index')
+    except pessoa.DoesNotExist:
+        messages.error(request, "Usuário não encontrado.")
+        return redirect('index')
+
     return render(request, 'sentiment/sentiment.html')
 
 def sobre(request):
@@ -150,8 +174,23 @@ vectorizer = joblib.load(VECTORIZER_PATH)
 label_encoder = joblib.load(LABEL_ENCODER_PATH)
 
 def sentiment_ml(request):
-    # Renderiza o formulário HTML
+    usuario = request.session.get('username', None)
+
+    if not usuario:
+        messages.error(request, "Você precisa estar logado para acessar esta página.")
+        return redirect('index')
+
+    try:
+        usuario_pessoa = pessoa.objects.get(usuario=usuario)
+        if not usuario_pessoa.permissao_sentiment_ml:
+            messages.error(request, "Você não tem permissão para acessar esta página.")
+            return redirect('index')
+    except pessoa.DoesNotExist:
+        messages.error(request, "Usuário não encontrado.")
+        return redirect('index')
+
     return render(request, 'sentiment/sentiment_ml.html')
+
 
 def predict_sentiment(request):
     # Captura o texto enviado via GET

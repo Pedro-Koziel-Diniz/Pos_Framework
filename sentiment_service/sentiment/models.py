@@ -10,13 +10,10 @@ class pessoa(models.Model):
     funcao = models.CharField(max_length=30, null=True, blank=True, verbose_name='Funcao')
     nascimento = models.DateField(null=True, blank=True, verbose_name='Nascimento')
     ativo = models.BooleanField(default=True, verbose_name='Ativo')
-
+    permissao_sentiment = models.BooleanField(default=False, verbose_name="Acesso Sentiment GPT")
+    permissao_sentiment_ml = models.BooleanField(default=False, verbose_name="Acesso Sentiment ML")
     def __str__(self):
-        if self.user:
-            return f"{self.user.username} - {self.sentiment}"
-        elif self.usuario_pessoa:
-            return f"{self.usuario_pessoa.usuario} - {self.sentiment}"
-        return f"Anônimo - {self.sentiment}"
+        return f"{self.nome} - {self.usuario}"
     class Meta:
         ordering = ['nome', 'funcao',]
 
