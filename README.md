@@ -59,6 +59,9 @@ Ative o ambiente virtual:
 - No Windows:
   ```bash
   venv\Scripts\activate
+  ou
+  cd .\venv\Scripts\
+  .\activate.ps1
   ```
 
 ### **Passo 3: Instalar Dependências**
@@ -74,6 +77,7 @@ pip install -r requirements.txt
 
 Crie um superusuário para acessar a área administrativa do Django:
 ```bash
+cd .\sentiment_service\  
 python manage.py createsuperuser
 ```
 Durante o processo, você precisará fornecer as seguintes informações:
