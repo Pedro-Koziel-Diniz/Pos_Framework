@@ -10,11 +10,13 @@ from django.contrib.auth import authenticate, login
 from .models import PredictionHistory
 from .models import pessoa
 from django.contrib import messages
-
+import requests
 load_dotenv()  # take environment variables from .env.
 
 # Configurar a API key da OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+DEEPSEEK_API_URL = os.getenv("DEEPSEEK_API_URL", "https://api.deepseek.com/v1/chat/completions")
 
 def index(request):
     if request.method == 'POST':
@@ -28,7 +30,7 @@ def index(request):
             request.session['username'] = usuario
             request.session['password'] = senha
             request.session['usernamefull'] = user.get_full_name()
-            return redirect('sentiment/')  # Usuário Django sempre vai para sentiment
+            return redirect('sentiment_gpt')  # Usuário Django sempre vai para sentiment
 
         # Se falhar, tenta autenticar no modelo `pessoa`
         try:
@@ -37,14 +39,16 @@ def index(request):
                 request.session['username'] = usuario_pessoa.usuario
                 request.session['usernamefull'] = usuario_pessoa.nome
                 
-                # Lógica de redirecionamento baseada nas permissões
-                if usuario_pessoa.permissao_sentiment:
-                    return redirect('sentiment')  # Redireciona para Sentiment GPT
+                # **Lógica de Redirecionamento Baseada nas Permissões**
+                if usuario_pessoa.permissao_sentiment_gpt:
+                    return redirect('sentiment_gpt')  # GPT
+                elif usuario_pessoa.permissao_sentiment_deepseek:
+                    return redirect('sentiment_deepseek')  # DeepSeek
                 elif usuario_pessoa.permissao_sentiment_ml:
-                    return redirect('sentiment_ml')  # Redireciona para Sentiment ML
+                    return redirect('sentiment_ml')  # Machine Learning
                 else:
                     messages.error(request, "Você não tem permissão para acessar o sistema.")
-                    return redirect('index')  # Redireciona para login
+                    return redirect('index')
 
             else:
                 messages.error(request, "Usuário inativo. Contate o administrador.")
@@ -81,6 +85,47 @@ def classify_sentiment_gpt(content, model="gpt-4o-mini"):
         print(f"Error processing text: {content}\n{e}")
         return None
     
+def classify_sentiment_deepseek(content, model="deepseek-chat"):
+    """
+    Usa a API da DeepSeek para classificar o sentimento de um texto.
+    Retorna apenas 'pos' ou 'neg'.
+    """
+    try:
+        headers = {
+            "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "model": model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": (
+                        "Classify the sentiment of the following text as 'pos' for positive or 'neg' for negative."
+                        " Respond with only 'pos' or 'neg' and no additional text.\n\n"
+                        f"Text: \"{content}\""
+                    ),
+                }
+            ],
+            "temperature": 0.2,
+            "max_tokens": 10
+        }
+        
+        response = requests.post(DEEPSEEK_API_URL, json=payload, headers=headers)
+        response_data = response.json()
+
+        if "choices" in response_data:
+            result = response_data["choices"][0]["message"]["content"].strip().lower()
+            return result if result in ["pos", "neg"] else "invalid"
+        
+        print(f"DeepSeek API Error: {response_data}")
+        return None
+
+    except Exception as e:
+        print(f"Error processing text: {content}\n{e}")
+        return None
+        
 def cadastro(request):
     if request.method == 'POST':
         # Captura os dados do formulário
@@ -117,7 +162,7 @@ def cadastro(request):
 
     # Renderiza o formulário de cadastro
     return render(request, 'sentiment/cadastro.html')
-def sentiment(request):
+def sentiment_deepseek(request):
     usuario = request.session.get('username', None)
 
     if not usuario:
@@ -126,38 +171,123 @@ def sentiment(request):
 
     try:
         usuario_pessoa = pessoa.objects.get(usuario=usuario)
-        if not usuario_pessoa.permissao_sentiment:
+        if not usuario_pessoa.permissao_sentiment_deepseek:  # ✅ USANDO O CAMPO CORRETO
             messages.error(request, "Você não tem permissão para acessar esta página.")
             return redirect('index')
     except pessoa.DoesNotExist:
         messages.error(request, "Usuário não encontrado.")
         return redirect('index')
 
-    return render(request, 'sentiment/sentiment.html')
+    return render(request, 'sentiment/sentiment_deepseek.html')
+
+def sentiment_gpt(request):
+    usuario = request.session.get('username', None)
+
+    if not usuario:
+        messages.error(request, "Você precisa estar logado para acessar esta página.")
+        return redirect('index')
+
+    try:
+        usuario_pessoa = pessoa.objects.get(usuario=usuario)
+        if not usuario_pessoa.permissao_sentiment_gpt:  # ✅ USANDO O CAMPO CORRETO
+            messages.error(request, "Você não tem permissão para acessar esta página.")
+            return redirect('index')
+    except pessoa.DoesNotExist:
+        messages.error(request, "Usuário não encontrado.")
+        return redirect('index')
+
+    return render(request, 'sentiment/sentiment_gpt.html')
+
+def sentiment_ml(request):
+    usuario = request.session.get('username', None)
+
+    if not usuario:
+        messages.error(request, "Você precisa estar logado para acessar esta página.")
+        return redirect('index')
+
+    try:
+        usuario_pessoa = pessoa.objects.get(usuario=usuario)
+        if not usuario_pessoa.permissao_sentiment_ml:  # ✅ USANDO O CAMPO CORRETO
+            messages.error(request, "Você não tem permissão para acessar esta página.")
+            return redirect('index')
+    except pessoa.DoesNotExist:
+        messages.error(request, "Usuário não encontrado.")
+        return redirect('index')
+
+    return render(request, 'sentiment/sentiment_ml.html')
+
 
 def sobre(request):
     return render(request, 'sentiment/sobre.html')
 
-def classify_sentiment(request):
+def classify_sentiment_gpt_view(request):
+    """
+    Chama o modelo GPT para classificar sentimento via API.
+    """
     if request.method == 'POST':
         text = request.POST.get('text', '')
-        sentiment = classify_sentiment_gpt(text)
-         # Se o sentimento for "neg", converte para "NEGATIVO"
-        if sentiment == "neg":
-            sentiment = "NEGATIVO"
-        # Se o sentimento for "pos", converte para "POSITIVO"
-        elif sentiment == "pos":
-            sentiment = "POSITIVO"
-        # Verifica se o usuário logado é do modelo User ou pessoa
+
+        # Corrigindo chamada da função correta
+        sentiment = classify_sentiment_gpt(text)  # Correto: Chamando a função de processamento
+
+        if sentiment is None:
+            return JsonResponse({'error': 'Erro ao processar sentimento com GPT'}, status=500)
+
+        sentiment = "NEGATIVO" if sentiment == "neg" else "POSITIVO" if sentiment == "pos" else "INVÁLIDO"
+
+        # Verifica usuário autenticado
         usuario_pessoa = None
         if 'username' in request.session and not request.user.is_authenticated:
             try:
                 usuario_pessoa = pessoa.objects.get(usuario=request.session['username'])
             except pessoa.DoesNotExist:
                 usuario_pessoa = None
-                    
-        PredictionHistory.objects.create(text=text, sentiment=sentiment, source='sentiment', user=request.user if request.user.is_authenticated else None, usuario_pessoa=usuario_pessoa)
+
+        # Salva no histórico
+        PredictionHistory.objects.create(
+            text=text, 
+            sentiment=sentiment, 
+            source='sentiment-gpt', 
+            user=request.user if request.user.is_authenticated else None, 
+            usuario_pessoa=usuario_pessoa
+        )
+
         return JsonResponse({'text': text, 'sentiment': sentiment})
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def classify_sentiment_deepseek_view(request):
+    """
+    Chama o modelo DeepSeek para classificar sentimento via API.
+    """
+    if request.method == 'POST':
+        text = request.POST.get('text', '')
+
+        sentiment = classify_sentiment_deepseek(text)
+        if sentiment is None:
+            return JsonResponse({'error': 'Erro ao processar sentimento com DeepSeek'}, status=500)
+
+        sentiment = "NEGATIVO" if sentiment == "neg" else "POSITIVO" if sentiment == "pos" else "INVÁLIDO"
+
+        # Verifica usuário autenticado
+        usuario_pessoa = None
+        if 'username' in request.session and not request.user.is_authenticated:
+            try:
+                usuario_pessoa = pessoa.objects.get(usuario=request.session['username'])
+            except pessoa.DoesNotExist:
+                usuario_pessoa = None
+
+        # Salva no histórico
+        PredictionHistory.objects.create(
+            text=text, 
+            sentiment=sentiment, 
+            source='sentiment-deepseek', 
+            user=request.user if request.user.is_authenticated else None, 
+            usuario_pessoa=usuario_pessoa
+        )
+
+        return JsonResponse({'text': text, 'sentiment': sentiment})
+    
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 ### Modelos de classificação por ML

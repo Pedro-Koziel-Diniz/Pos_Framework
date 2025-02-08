@@ -14,13 +14,15 @@
     <div class="expandable-menu">
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       <div class="menu-content">
-        <a href="http://127.0.0.1:8000/admin" >Admin</a>
-        <a href="http://127.0.0.1:8000/sentiment">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/admin">Admin</a>
+        <a href="http://127.0.0.1:8000/sentiment-gpt">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/sentiment-deepseek">Classificação DeepSeek</a>
         <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
         <a href="http://127.0.0.1:8000/historico/">Histórico de Análises</a>
         <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
       </div>
     </div>
+
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
@@ -28,12 +30,13 @@
         {% endfor %}
     </div>
     {% endif %}
+
     <!-- Container Principal -->
     <div class="chat-container">
       <!-- Cabeçalho -->
       <div class="chat-header">
         <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
-        <h1>Classificação de sentimentos - GPT</h1>
+        <h1>Classificação de sentimentos - DeepSeek</h1>
       </div>
 
       <!-- Formulário de Entrada -->
@@ -56,13 +59,20 @@
         menu.classList.toggle('expanded');
       }
 
-      // Função para classificar o sentimento
+      // Função para classificar o sentimento usando DeepSeek
       async function classifySentiment() {
-        const text = document.getElementById('text').value;
+        const text = document.getElementById('text').value.trim();
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const resultElement = document.getElementById('result');
+
+        // Verificar se o usuário digitou algo antes de enviar
+        if (!text) {
+          resultElement.innerHTML = '<strong>Erro:</strong> Digite um texto para análise!';
+          return;
+        }
 
         try {
-          const response = await fetch('/classify/', {
+          const response = await fetch('/classify-deepseek/', {  // ✅ DeepSeek API endpoint
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -74,21 +84,20 @@
           const result = await response.json();
 
           // Exibir o resultado com base na classificação
-          const resultElement = document.getElementById('result');
           if (result.sentiment) {
             resultElement.innerHTML = `<strong>Sentimento: </strong> 
               <span class="badge ${
                 result.sentiment === 'NEGATIVO' ? 'negative' : 'positive'
               }">${result.sentiment}</span>`;
           } else {
-            resultElement.innerHTML = `<strong>Error:</strong> ${
+            resultElement.innerHTML = `<strong>Erro:</strong> ${
               result.error || 'Erro desconhecido'
             }`;
           }
         } catch (error) {
           console.error('Erro ao classificar o sentimento:', error);
-          document.getElementById('result').innerHTML =
-            '<strong>Error:</strong> Falha na requisição.';
+          resultElement.innerHTML =
+            '<strong>Erro:</strong> Falha na requisição ao servidor.';
         }
       }
     </script>

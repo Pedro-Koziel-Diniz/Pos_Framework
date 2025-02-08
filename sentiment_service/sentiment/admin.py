@@ -12,8 +12,8 @@ def desabilitar_pessoas(ModelAdmin, request, queryset):
     queryset.update(ativo=False)
 
 class PessoaCustomizado(admin.ModelAdmin):
-    list_display = ('nome', 'usuario', 'senha', 'email', 'celular', 'funcao', 'nascimento', 'calcula_idade', 'ativo', 'permissao_sentiment', 'permissao_sentiment_ml')
-    list_filter = ('ativo', 'permissao_sentiment', 'permissao_sentiment_ml')
+    list_display = ('nome', 'usuario', 'senha', 'email', 'celular', 'funcao', 'nascimento', 'calcula_idade', 'ativo', 'permissao_sentiment_gpt', 'permissao_sentiment_deepseek', 'permissao_sentiment_ml')
+    list_filter = ('ativo', 'permissao_sentiment_gpt', 'permissao_sentiment_deepseek','permissao_sentiment_ml')
     search_fields = ('nome', 'usuario', 'email')
     actions = [habilitar_pessoas, desabilitar_pessoas]
     

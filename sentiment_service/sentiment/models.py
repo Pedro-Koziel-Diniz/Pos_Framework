@@ -10,7 +10,8 @@ class pessoa(models.Model):
     funcao = models.CharField(max_length=30, null=True, blank=True, verbose_name='Funcao')
     nascimento = models.DateField(null=True, blank=True, verbose_name='Nascimento')
     ativo = models.BooleanField(default=True, verbose_name='Ativo')
-    permissao_sentiment = models.BooleanField(default=False, verbose_name="Acesso Sentiment GPT")
+    permissao_sentiment_gpt = models.BooleanField(default=False, verbose_name="Acesso Sentiment GPT")
+    permissao_sentiment_deepseek = models.BooleanField(default=False, verbose_name="Acesso Sentiment DeepSeek")
     permissao_sentiment_ml = models.BooleanField(default=False, verbose_name="Acesso Sentiment ML")
     def __str__(self):
         return f"{self.nome} - {self.usuario}"
@@ -20,7 +21,7 @@ class pessoa(models.Model):
 class PredictionHistory(models.Model):
     text = models.TextField()  # Texto inserido
     sentiment = models.CharField(max_length=50)  # Sentimento previsto
-    source = models.CharField(max_length=50, default="sentiment")  # Origem do registro
+    source = models.CharField(max_length=50, default="sentiment_gpt")  # Origem do registro
     created_at = models.DateTimeField(auto_now_add=True)  # Data e hora da previsão
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     usuario_pessoa = models.ForeignKey('pessoa', on_delete=models.CASCADE, null=True, blank=True)
