@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pós Graduação UFG Framework</title>
 
-    <!-- Incluindo o CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/script.css' %}" />
   </head>
   <body>
-    <!-- Menu Expansível -->
     <div class="expandable-menu">
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       <div class="menu-content">
-        <a href="http://127.0.0.1:8000/admin" >Admin</a>
+        <a href="http://127.0.0.1:8000/admin">Admin</a>
         <a href="http://127.0.0.1:8000/sentiment-gpt">Classificação GPT</a>
         <a href="http://127.0.0.1:8000/sentiment-deepseek">Classificação DeepSeek</a>
         <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
@@ -22,80 +20,82 @@
         <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
       </div>
     </div>
+
     {% if messages %}
     <div class="messages">
-        {% for message in messages %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
+      {% for message in messages %}
+      <div class="alert alert-danger">{{ message }}</div>
+      {% endfor %}
     </div>
     {% endif %}
 
-    <!-- Container Principal -->
     <div class="chat-container">
-      <!-- Cabeçalho -->
       <div class="chat-header">
         <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
-        <h1>Classificação de sentimentos - Machine learning</h1>
+        <h1>Classificação de sentimentos - Machine Learning</h1>
       </div>
 
-      <!-- Formulário de Entrada -->
       <div class="form-container">
         <form onsubmit="event.preventDefault(); getSentiment();">
           {% csrf_token %}
           <textarea id="text" class="text-input" rows="4" placeholder="Digite o texto para análise..."></textarea>
+          
+          <h3>Escolha os modelos para análise:</h3>
+          <label><input type="checkbox" name="model" value="KNN"> KNN</label>
+          <label><input type="checkbox" name="model" value="LinearSVC"> LinearSVC</label>
+          <label><input type="checkbox" name="model" value="LogisticRegression" checked> LogisticRegression</label>
+          <label><input type="checkbox" name="model" value="MultinomialNB"> MultinomialNB</label>
+          <label><input type="checkbox" name="model" value="RandomForest"> RandomForest</label>
+          
           <button type="submit" class="submit-btn">Classificar Sentimento</button>
         </form>
         <div id="result" class="result-container"></div>
       </div>
     </div>
 
-    <!-- Incluindo os scripts -->
     <script src="{% static 'js/script.js' %}"></script>
     <script>
-      // Função para alternar o menu expansível
       function toggleMenu() {
-        const menu = document.querySelector('.menu-content');
-        menu.classList.toggle('expanded');
+        const menu = document.querySelector(".menu-content");
+        menu.classList.toggle("expanded");
       }
 
-      // Função para enviar o texto e exibir a previsão de sentimento
       async function getSentiment() {
-        const text = document.getElementById('text').value;
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const text = document.getElementById("text").value;
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-        // Verificar se o texto foi fornecido
+        // Obtém os modelos selecionados
+        const selectedModels = Array.from(document.querySelectorAll('input[name="model"]:checked'))
+          .map(cb => cb.value)
+          .join(",");
+
         if (!text) {
-          alert('Por favor, insira um texto!');
+          alert("Por favor, insira um texto!");
           return;
         }
 
         try {
-          // Enviar o texto via GET para a API Django
-          const response = await fetch(`/predict-sentiment/?text=${encodeURIComponent(text)}`, {
-            method: 'GET',
+          const response = await fetch(`/predict-sentiment/?text=${encodeURIComponent(text)}&models=${encodeURIComponent(selectedModels)}`, {
+            method: "GET",
             headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': csrfToken,
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken,
             },
           });
 
           const data = await response.json();
+          const resultElement = document.getElementById("result");
 
-          // Exibir o resultado
-          const resultElement = document.getElementById('result');
-          if (data.sentimento_previsto) {
-            resultElement.innerHTML = `
-              <strong>Sentimento:</strong> 
-              <span class="badge ${data.sentimento_previsto === 'Negativo' ? 'negative' : 'positive'}">
-                ${data.sentimento_previsto}
-              </span>
-            `;
+          if (data.resultados) {
+            resultElement.innerHTML = "<strong>Resultados:</strong><br>" + 
+              Object.entries(data.resultados).map(([model, sentiment]) => 
+                `<span class="badge">${model}: ${sentiment}</span>`).join("<br>");
           } else {
-            resultElement.innerHTML = `<strong>Error:</strong> ${data.error || 'Erro desconhecido'}`;
+            resultElement.innerHTML = `<strong>Error:</strong> ${data.error || "Erro desconhecido"}`;
           }
         } catch (error) {
-          console.error('Erro ao realizar a previsão:', error);
-          document.getElementById('result').innerHTML = '<strong>Error:</strong> Falha na requisição.';
+          console.error("Erro ao realizar a previsão:", error);
+          document.getElementById("result").innerHTML = "<strong>Error:</strong> Falha na requisição.";
         }
       }
     </script>
