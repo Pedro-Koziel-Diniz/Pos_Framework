@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meu Token</title>
+
+    <!-- Incluindo o CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+</head>
+<body>
+    <!-- Menu Expansível -->
+    <div class="expandable-menu">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <div class="menu-content">
+            <a href="http://127.0.0.1:8000/admin">Admin</a>
+            <a href="http://127.0.0.1:8000/sentiment-gpt">Classificação GPT</a>
+            <a href="http://127.0.0.1:8000/sentiment-deepseek">Classificação DeepSeek</a>
+            <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
+            <a href="http://127.0.0.1:8000/historico/">Histórico de Análises</a>
+            <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
+            <a href="http://127.0.0.1:8000/token/">Token</a>
+        </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>API </h1>
+        </div>
+        <div class="form-container">
+            <section class="project-description">
+                <h2>Token de Acesso</h2>
+                <p><strong>Usuário:</strong> {{ usuario }}</p>
+                <p><strong>Token:</strong> {{ token }}</p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Incluindo o JS -->
+    <script>
+      function toggleMenu() {
+        const menu = document.querySelector('.menu-content')
+        menu.classList.toggle('expanded')
+      }
+    </script>
+</body>
+</html>

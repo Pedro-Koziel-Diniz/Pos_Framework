@@ -3,6 +3,7 @@ import requests
 from dotenv import load_dotenv
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import JsonResponse
 from .models_sentiment import PredictionHistory
 from .models_cadastro import pessoa
 
@@ -40,20 +41,32 @@ def classify_sentiment_deepseek(content, model="deepseek-chat"):
         response = requests.post(DEEPSEEK_API_URL, json=payload, headers=headers)
         response_data = response.json()
 
+        # **Verifica se a resposta contém erro**
+        if "error" in response_data:
+            error_code = response_data["error"].get("code")
+            error_message = response_data["error"].get("message", "Erro desconhecido na API DeepSeek")
+            
+            if error_code == "invalid_request_error":
+                print(f"⚠️ DeepSeek API Error: {response_data}")
+                return "Insufficient Balance"  # Retorna um aviso claro
+            
+            print(f"DeepSeek API Error: {response_data}")
+            return None  # Retorna erro genérico
+
         if "choices" in response_data:
             result = response_data["choices"][0]["message"]["content"].strip().lower()
             return result if result in ["pos", "neg"] else "invalid"
-        
-        print(f"DeepSeek API Error: {response_data}")
+
         return None
 
     except Exception as e:
         print(f"Error processing text: {content}\n{e}")
         return None
-    
-    
 
 def sentiment_deepseek(request):
+    """
+    Página da análise de sentimento usando DeepSeek.
+    """
     usuario = request.session.get('username', None)
 
     if not usuario:
@@ -62,7 +75,7 @@ def sentiment_deepseek(request):
 
     try:
         usuario_pessoa = pessoa.objects.get(usuario=usuario)
-        if not usuario_pessoa.permissao_sentiment_deepseek:  # ✅ USANDO O CAMPO CORRETO
+        if not usuario_pessoa.permissao_sentiment_deepseek:
             messages.error(request, "Você não tem permissão para acessar esta página.")
             return redirect('index')
     except pessoa.DoesNotExist:
@@ -79,6 +92,10 @@ def classify_sentiment_deepseek_view(request):
         text = request.POST.get('text', '')
 
         sentiment = classify_sentiment_deepseek(text)
+        
+        if sentiment == "Insufficient Balance":
+            return JsonResponse({'error': 'Saldo insuficiente para consulta na API DeepSeek.'}, status=402)
+
         if sentiment is None:
             return JsonResponse({'error': 'Erro ao processar sentimento com DeepSeek'}, status=500)
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models_cadastro import pessoa
+import uuid
 
 def cadastro(request):
     if request.method == 'POST':
@@ -15,7 +16,9 @@ def cadastro(request):
         if pessoa.objects.filter(email=email).exists():
             messages.error(request, "E-mail já cadastrado. Utilize outro e-mail.")
             return redirect('cadastro')
-
+        
+        token_gerado = str(uuid.uuid4().hex)
+        
         nova_pessoa = pessoa(
             nome=nome,
             usuario=usuario,
@@ -24,6 +27,7 @@ def cadastro(request):
             celular=celular,
             funcao=funcao,
             nascimento=nascimento,
+            token=token_gerado
         )
         nova_pessoa.save()
 

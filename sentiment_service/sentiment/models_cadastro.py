@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 class pessoa(models.Model):
     nome = models.CharField(max_length=50, null=False, blank=False, verbose_name='Nome')
@@ -12,10 +13,15 @@ class pessoa(models.Model):
     permissao_sentiment_gpt = models.BooleanField(default=False, verbose_name="Acesso Sentiment GPT")
     permissao_sentiment_deepseek = models.BooleanField(default=False, verbose_name="Acesso Sentiment DeepSeek")
     permissao_sentiment_ml = models.BooleanField(default=False, verbose_name="Acesso Sentiment ML")
+    token = models.CharField(max_length=40, unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = str(uuid.uuid4().hex)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nome} - {self.usuario}"
 
     class Meta:
         ordering = ['nome', 'funcao']
-

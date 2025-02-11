@@ -4,7 +4,8 @@ from .views_cadastro import cadastro
 from .views_gpt import sentiment_gpt, classify_sentiment_gpt_view
 from .views_deepseek import sentiment_deepseek, classify_sentiment_deepseek_view
 from .views_ml import sentiment_ml, predict_sentiment
-from .views_token import CustomAuthToken  # Import para autenticação personalizada
+from .views_token import token_view, obter_token
+from .views_api import predict_sentiment_api  
 
 urlpatterns = [
     path('', index, name='index'),
@@ -26,5 +27,7 @@ urlpatterns = [
     path('sobre/', sobre, name='sobre'),
 
     # API Token Authentication
-    path('api/token-auth/', CustomAuthToken.as_view(), name='api_token_auth'),
+    path('token/', token_view, name='token'),
+    path('api/token/', obter_token, name='obter_token'), 
+    path('api/predict-sentiment/', predict_sentiment_api, name='predict_sentiment_api'),  # Corrigido
 ]
