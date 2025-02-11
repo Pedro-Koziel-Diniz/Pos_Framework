@@ -59,21 +59,21 @@
         const menu = document.querySelector(".menu-content");
         menu.classList.toggle("expanded");
       }
-
+    
       async function getSentiment() {
         const text = document.getElementById("text").value;
         const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
+    
         // Obtém os modelos selecionados
         const selectedModels = Array.from(document.querySelectorAll('input[name="model"]:checked'))
           .map(cb => cb.value)
           .join(",");
-
+    
         if (!text) {
           alert("Por favor, insira um texto!");
           return;
         }
-
+    
         try {
           const response = await fetch(`/predict-sentiment/?text=${encodeURIComponent(text)}&models=${encodeURIComponent(selectedModels)}`, {
             method: "GET",
@@ -82,14 +82,24 @@
               "X-CSRFToken": csrfToken,
             },
           });
-
+    
           const data = await response.json();
           const resultElement = document.getElementById("result");
-
+    
+          // Garante um espaçamento adequado antes dos resultados
+          resultElement.innerHTML = `<div style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">Resultados:</div>`;
+    
           if (data.resultados) {
-            resultElement.innerHTML = "<strong>Resultados:</strong><br>" + 
-              Object.entries(data.resultados).map(([model, sentiment]) => 
-                `<span class="badge">${model}: ${sentiment}</span>`).join("<br>");
+            Object.entries(data.resultados).forEach(([model, sentiment]) => {
+              // Define a classe CSS com base no sentimento
+              const sentimentClass = sentiment.toLowerCase() === "negativo" ? "negative" : "positive";
+    
+              resultElement.innerHTML += `
+                <div style="margin-bottom: 20px;">
+                  <span class="badge ${sentimentClass}">${model}: ${sentiment}</span>
+                </div>
+              `;
+            });
           } else {
             resultElement.innerHTML = `<strong>Error:</strong> ${data.error || "Erro desconhecido"}`;
           }
@@ -98,6 +108,6 @@
           document.getElementById("result").innerHTML = "<strong>Error:</strong> Falha na requisição.";
         }
       }
-    </script>
+    </script>        
   </body>
 </html>

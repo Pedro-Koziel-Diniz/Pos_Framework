@@ -70,7 +70,7 @@ def predict_sentiment(request):
             else:
                 results[model_name] = "Modelo não encontrado"
 
-        return JsonResponse({"texto": new_text, "resultados": results})
+        return JsonResponse({"text": new_text, "resultados": results})
 
     except Exception as e:
         return JsonResponse({"error": f"Erro ao processar o texto: {str(e)}"}, status=500)

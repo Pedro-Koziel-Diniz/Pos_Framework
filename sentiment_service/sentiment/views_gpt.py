@@ -46,7 +46,7 @@ def sentiment_gpt(request):
 
     try:
         usuario_pessoa = pessoa.objects.get(usuario=usuario)
-        if not usuario_pessoa.permissao_sentiment_gpt:  # ✅ USANDO O CAMPO CORRETO
+        if not usuario_pessoa.permissao_sentiment_gpt:  
             messages.error(request, "Você não tem permissão para acessar esta página.")
             return redirect('index')
     except pessoa.DoesNotExist:
