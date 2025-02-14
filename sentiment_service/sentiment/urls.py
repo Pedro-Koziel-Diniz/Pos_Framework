@@ -28,6 +28,6 @@ urlpatterns = [
 
     # API Token Authentication
     path('token/', token_view, name='token'),
-    path('api/token/', obter_token, name='obter_token'), 
-    path('api/predict-sentiment/', predict_sentiment_api, name='predict_sentiment_api'),  # Corrigido
+    path('api/v1/token/', obter_token, name='obter_token'), 
+    path('api/v1/predict-sentiment/', predict_sentiment_api, name='predict_sentiment_api'),
 ]
