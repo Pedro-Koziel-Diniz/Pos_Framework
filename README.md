@@ -124,16 +124,16 @@ Use o usuario e a senha criados no superusuário para acessar o Admin do Django 
 
 ## **78. Acessar o Sentiment API**
 Obtendo chave API:
-
+```
 curl -X POST http://127.0.0.1:8000/api/v1/token/ \
      -H "Content-Type: application/json" \
      --data-binary '{
          "usuario": "meu_usuario",
          "senha": "minha_senha"
      }'
-
+```
 Acessando modelos de ML:
-
+```
 curl -X POST http://127.0.0.1:8000/api/v1/predict-sentiment/ \
      -H "Content-Type: application/json" \
      -H "Authorization: SEU_TOKEN_USUARIO" \
@@ -141,23 +141,23 @@ curl -X POST http://127.0.0.1:8000/api/v1/predict-sentiment/ \
          "text": "Esse produto é excelente, adorei a experiência!", 
          "models": ["KNN", "LinearSVC", "LogisticRegression", "MultinomialNB", "RandomForest"]
      }'
-
+```
 Acessando modelo de GPT
-
+```
 curl -X POST http://127.0.0.1:8000/api/v1/predict-sentiment/ \
      -H "Content-Type: application/json" \
      -H "Authorization: SEU_TOKEN_USUARIO" \
      --data-binary '{"text": "Estou muito feliz hoje!", "models": ["GPT"]}'
-
+```
 Acessando modelo de DeepSeek
-
+```
 curl -X POST http://127.0.0.1:8000/api/v1/predict-sentiment/ \
      -H "Content-Type: application/json" \
      -H "Authorization: SEU_TOKEN_USUARIO" \
      --data-binary '{"text": "Estou muito feliz hoje!", "models": ["DeepSeek"]}'
-
+```
 Acessando modelo de Conectando Diferentes Modelos
-
+```
 curl -X POST http://127.0.0.1:8000/api/v1/predict-sentiment/ \
      -H "Content-Type: application/json" \
      -H "Authorization: SEU_TOKEN_USUARIO" \
@@ -165,3 +165,4 @@ curl -X POST http://127.0.0.1:8000/api/v1/predict-sentiment/ \
          "text": "Esse produto é excelente, adorei a experiência!", 
          "models": ["KNN", "LinearSVC", "LogisticRegression", "MultinomialNB", "RandomForest","GPT"]
      }'  
+```
