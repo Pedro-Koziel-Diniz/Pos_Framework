@@ -39,10 +39,12 @@
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       <div class="menu-content">
         <a href="http://127.0.0.1:8000/admin">Admin</a>
-        <a href="http://127.0.0.1:8000/sentiment">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/sentiment-gpt">Classificação GPT</a>
+        <a href="http://127.0.0.1:8000/sentiment-deepseek">Classificação DeepSeek</a>
         <a href="http://127.0.0.1:8000/sentiment-ml">Classificação ML</a>
         <a href="http://127.0.0.1:8000/historico/">Histórico de Análises</a>
         <a href="http://127.0.0.1:8000/sobre/">Sobre</a>
+        <a href="http://127.0.0.1:8000/token/">Token</a>
       </div>
     </div>
 
@@ -59,6 +61,7 @@
         <table border="1" class="history-table">
           <thead>
             <tr>
+              <th>Usuário</th>
               <th>Texto de entrada</th>
               <th>Sentimento previsto</th>
               <th>Data de entrada</th>
@@ -68,6 +71,15 @@
           <tbody>
             {% for prediction in predictions %}
               <tr>
+                <td>
+                  {% if prediction.user %}
+                    {{ prediction.user.username }}
+                  {% elif prediction.usuario_pessoa %}
+                    {{ prediction.usuario_pessoa.usuario }}
+                  {% else %}
+                    <span style="color: red;">Não cadastrado</span>
+                  {% endif %}
+                </td>
                 <td>{{ prediction.text }}</td>
                 <td class="uppercase">{{ prediction.sentiment }}</td>
                 <td>{{ prediction.created_at }}</td>
@@ -80,7 +92,6 @@
     </div>
 
     <!-- Incluindo os scripts -->
-    <script src="{% static 'js/script.js' %}"></script>
     <script>
       // Função para alternar o menu expansível
       function toggleMenu() {

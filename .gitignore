@@ -1,0 +1,37 @@
+db.sqlite3
+sentiment_service\db.sqlite3
+
+# Ignorar ambientes virtuais comuns
+venv/
+.env/
+.venv/
+env/
+
+# Ignorar arquivos de cache do Python
+_pycache_/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar logs e arquivos temporários
+*.log
+*.tmp
+*.swp
+
+# Ignorar arquivos de configuração do ambiente
+.env
+*.env
+*.ini
+*.toml
+
+# Ignorar arquivos gerados pelo Jupyter Notebook
+.ipynb_checkpoints/
+
+# Ignorar dependências geradas por pacotes
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignorar arquivos do editor de código (ex: VSCode, PyCharm)
+.vscode/
+.idea/
+*.iml

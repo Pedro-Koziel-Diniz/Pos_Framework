@@ -5,9 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Sentiment Service</title>
 
-    <!-- Incluindo o CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/script.css' %}" />
+
+    <style>
+      .messages {
+        text-align: center;
+        margin-top: 10px;
+      }
+      .alert {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 5px;
+        display: inline-block;
+        width: 50%;
+        margin: auto;
+      }
+      .alert.error {
+        color: red;
+        border: 2px solid red;
+        background-color: rgba(255, 0, 0, 0.1);
+      }
+      .alert.success {
+        color: green;
+        border: 2px solid green;
+        background-color: rgba(0, 255, 0, 0.1);
+      }
+    </style>
   </head>
   <body>
     <!-- Menu Expansível -->
@@ -24,28 +49,35 @@
         <img src="{% static 'img/logosentiment.png' %}" alt="Logo Sentiment" />
         <h1>Bem-vindo ao Sentiment Service</h1>
       </div>
+      
+      <!-- Exibição de mensagens -->
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <div class="form-container">
         <form method="POST" action="{% url 'index' %}">
           {% csrf_token %}
-          <input type="text" name="username" class="text-input" placeholder="Usuário" required style="width: 90%; max-width: 340px;" />
-          <input type="password" name="password" class="text-input" placeholder="Senha" required style="width: 80%; max-width: 340px;" />                          
+          <input type="text" name="username" class="text-input" placeholder="Usuário" required />
+          <input type="password" name="password" class="text-input" placeholder="Senha" required />
           <button type="submit" class="submit-btn">Entrar</button>
         </form>
-        {{ msg }}
       </div>
 
-          <!-- Botão para Cadastro -->
-          <div style="text-align: center; margin-top: 20px;">
-            <p style="font-size: 17px; color:rgb(255, 255, 255); margin-bottom: 30px;">Cadastre-se:</p>
-            <a href="{% url 'cadastro' %}" class="submit-btn" style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px;">
-              Criar Conta
-            </a>
-          </div>
-      
+      <!-- Botão para Cadastro -->
+      <div style="text-align: center; margin-top: 20px;">
+        <p style="font-size: 17px; color:rgb(255, 255, 255); margin-bottom: 30px;">Cadastre-se:</p>
+        <a href="{% url 'cadastro' %}" class="submit-btn" style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-size: 16px;">
+          Criar Conta
+        </a>
+      </div>
     </div>
-
-    <!-- Incluindo o JS -->
-    <script src="{% static 'js/script.js' %}"></script>
     <script>
       function toggleMenu() {
         const menu = document.querySelector('.menu-content');

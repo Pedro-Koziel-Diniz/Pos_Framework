@@ -144,11 +144,18 @@ body {
   text-align: center;
 }
 
+#result {
+  margin-top: 15px; /* Garante espaço acima dos resultados */
+  text-align: center; /* Centraliza os resultados */
+}
 .badge {
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 14px;
+  display: inline-block;
+  margin: 5px; /* Define um espaço entre os badges */
 }
+
 
 .badge.positive {
   background-color: #28a745;
