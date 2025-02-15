@@ -1,12 +1,11 @@
-# Pós Agentes Inteligentes - FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL
+# Pós Agentes Inteligentes - INF0236 - FRAMEWORK DE DESENVOLVIMENTO WEB e INF0241 - CONSTRUÇÃO DE APIS PARA INTELIGÊNCIA ARTIFICIAL
+
 ![Diagrama do Projeto](posAPI.png)
 Repositório dedicado para o trabalho final desenvolvido na disciplina de FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL, da pós graduação de Agentes Inteligentes, pela UFG.
 
 Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
 
-A gravação pode ser acessada em: https://drive.google.com/file/d/1zLBL8sE_cz4gcuLSia4sWccVbJuXvtWB/view?usp=sharing
-
-## Descrição do trabalho
+## Descrição do projeto final (INF0236)
 
 Construir um site, aplicação (web/internet - Django), de forma que haja (i) carregamento de dados (ex: csv, excel, etc.), (ii) uso de algoritmo de IA, e (iii) mostrar os resultados em tela.
 
@@ -18,7 +17,21 @@ Construir um site, aplicação (web/internet - Django), de forma que haja (i) ca
           
 - Criação de um banco de dados para armazenar e gerenciar o histórico de análises realizadas.
 
-# Projeto Final
+
+## Descrição do Projeto Final (INF0241)
+
+Desenvolver uma API funcional que disponibilize pelo menos dois serviços de Inteligência Artificial (IA), demonstrando na prática todos os conceitos aprendidos ao longo da disciplina: boas práticas de desenvolvimento, versionamento, autenticação, documentação, logs, tratamento de erros, entre outros.
+
+**Requisitos Básicos**
+
+- a. Validação de dados  
+- b. Tratamento de erros  
+- c. Logs  
+- d. Segurança  
+- e. Versionamento  
+
+
+# Como executar
 
 
 Siga as instruções abaixo para garantir uma instalação e execução corretas.
@@ -77,9 +90,14 @@ pip install -r requirements.txt
 
 ## **4. Criar um Superusuário**
 
-Crie um superusuário para acessar a área administrativa do Django:
+Crie as tabelas no banco de dados:
 ```bash
 cd .\sentiment_service\  
+python manage.py migrate
+```
+
+Crie um superusuário para acessar a área administrativa do Django:
+```bash
 python manage.py createsuperuser
 ```
 Durante o processo, você precisará fornecer as seguintes informações:
@@ -87,12 +105,6 @@ Durante o processo, você precisará fornecer as seguintes informações:
 - Nome de usuário
 - Nome e sobrenome
 - Senha
-
-
-Crie as tabelas no banco de dados:
-```bash
-python manage.py migrate
-```
 
 ---
 
