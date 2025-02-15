@@ -88,7 +88,7 @@ pip install -r requirements.txt
 
 ---
 
-## **4. Criar um Superusuário**
+## **3. Criar um Superusuário**
 
 Crie as tabelas no banco de dados:
 ```bash
@@ -108,7 +108,7 @@ Durante o processo, você precisará fornecer as seguintes informações:
 
 ---
 
-## **5. Executar o Servidor de Desenvolvimento**
+## **4. Executar o Servidor de Desenvolvimento**
 
 Inicie o servidor de desenvolvimento do Django:
 ```bash
@@ -119,7 +119,7 @@ Acesse o projeto no navegador em: [http://127.0.0.1:8000/](http://127.0.0.1:8000
 
 ---
 
-## **6. Acessar a Administração do Django**
+## **5. Acessar a Administração do Django**
 
 Para acessar o painel administrativo, entre no seguinte link:
 [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
@@ -128,13 +128,13 @@ Use o usuario e a senha criados para o superusuário.
 
 ---
 
-## **7. Acessar o Sentiment**
+## **6. Acessar o Sentiment Service**
 Clique em Criar Usuário na Tela de Login ou acesse o link:
 http://localhost:8000/sentiment/cadastro/
 
 Use o usuario e a senha criados no superusuário para acessar o Admin do Django e Liberar Permissões aos modelos.
 
-## **78. Acessar o Sentiment API**
+### **7. Acessar o Sentiment API**
 Obtendo chave API:
 ```
 curl -X POST http://127.0.0.1:8000/api/v1/token/ \
