@@ -35,6 +35,8 @@ Desenvolver uma API funcional que disponibilize pelo menos dois serviços de Int
 
 
 Siga as instruções abaixo para garantir uma instalação e execução corretas.
+Além disso, os projetos estao separados em dois frameworks diferentes: Django e FastAPI.
+Caso queira executar a Django siga o passo a passo, ou caso queira executar com FastAPI, entre na pasta fastapi e siga as recomendações.
 
 ---
 
@@ -134,7 +136,7 @@ http://localhost:8000/sentiment/cadastro/
 
 Use o usuario e a senha criados no superusuário para acessar o Admin do Django e Liberar Permissões aos modelos.
 
-### **7. Acessar o Sentiment API**
+## **7. Acessar o Sentiment API**
 Obtendo chave API:
 ```
 curl -X POST http://127.0.0.1:8000/api/v1/token/ \
