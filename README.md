@@ -1,7 +1,7 @@
 # Pós Agentes Inteligentes - INF0236 - FRAMEWORK DE DESENVOLVIMENTO WEB e INF0241 - CONSTRUÇÃO DE APIS PARA INTELIGÊNCIA ARTIFICIAL
 
 ![Diagrama do Projeto](posAPI.png)
-Repositório dedicado para o trabalho final desenvolvido na disciplina de FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL, da pós graduação de Agentes Inteligentes, pela UFG.
+Repositório dedicado para desenvolvimentos dos trabalhos finais nas disciplinas INF0236 - FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL e INF0241 - CONSTRUÇÃO DE APIS PARA INTELIGÊNCIA ARTIFICIAL, da pós graduação de Agentes Inteligentes da UNIVERSIDADE FEDERAL DE GOIÁS.
 
 Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
 
