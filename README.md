@@ -1,5 +1,5 @@
 # Pós Agentes Inteligentes - FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL
-![Diagrama do Projeto](pós API.drawio.png)
+![Diagrama do Projeto](posAPI.png)
 Repositório dedicado para o trabalho final desenvolvido na disciplina de FRAMEWORK DE DESENVOLVIMENTO WEB P/ CONSUMO DE MODELOS TREI. INTELIGÊNCIA ARTIFICIAL, da pós graduação de Agentes Inteligentes, pela UFG.
 
 Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
