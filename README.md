@@ -5,6 +5,8 @@ Repositório dedicado para desenvolvimentos dos trabalhos finais nas disciplinas
 
 Integrantes: Marcos Vinicius, Pedro Koziel e Wagner Filho.
 
+Link para os slides da apresentação: https://www.canva.com/design/DAGfLvdfvAI/dh9rH_H0g2TfOdPnYxgjtA/view?utm_content=DAGfLvdfvAI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h4c3197b036
+
 ## Descrição do projeto final (INF0236)
 
 Construir um site, aplicação (web/internet - Django), de forma que haja (i) carregamento de dados (ex: csv, excel, etc.), (ii) uso de algoritmo de IA, e (iii) mostrar os resultados em tela.
